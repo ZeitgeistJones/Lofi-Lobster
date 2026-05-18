@@ -6,7 +6,7 @@ Think Lofi Girl — but the world outside the window is the CLAWD blockchain. A 
 
 ## Live
 
-**[https://bafybeifzeweansegq4tocnfaofar2piqzcfj7iyfpvvzkcw6gq3vebkkfi.ipfs.community.bgipfs.com/](https://bafybeifzeweansegq4tocnfaofar2piqzcfj7iyfpvvzkcw6gq3vebkkfi.ipfs.community.bgipfs.com/)**
+**[https://bafybeiforjkdzjazf4yfec6jtmot5q77fe3atvwye4jp7vurau3vizmeaa.ipfs.community.bgipfs.com/](https://bafybeiforjkdzjazf4yfec6jtmot5q77fe3atvwye4jp7vurau3vizmeaa.ipfs.community.bgipfs.com/)**
 
 Deployed to IPFS via [bgipfs](https://bgipfs.com). Censorship-resistant. No servers.
 
