@@ -120,3 +120,697 @@
 .link:hover {
   opacity: 80%;
 }
+
+/* =====================================================================
+   LOFI LOBSTER — pixel art styles
+   ===================================================================== */
+
+:root {
+  --lofi-bg-deep: #0d0b1f;
+  --lofi-bg-mid: #1a1538;
+  --lofi-bg-room: #2d1f4a;
+  --lofi-purple: #7c3aed;
+  --lofi-purple-soft: #a78bfa;
+  --lofi-orange: #ff9a3c;
+  --lofi-orange-soft: #ffcf72;
+  --lofi-green: #34eeb6;
+  --lofi-green-glow: #6dffce;
+  --lofi-red: #ff5577;
+  --lofi-lobster: #ff4d6d;
+  --lofi-lobster-dark: #c1264c;
+  --lofi-window-night: #1d3a6e;
+  --lofi-window-night-2: #0f1f44;
+  --lofi-moon: #ffeec7;
+  --lofi-desk: #5a3b22;
+  --lofi-desk-dark: #3a2412;
+  --lofi-text-dim: #8b80b6;
+}
+
+.font-pixel,
+.lofi-root,
+.lofi-root * {
+  font-family: var(--font-press-start), ui-monospace, "Courier New", monospace;
+  letter-spacing: 0.02em;
+}
+
+img,
+canvas,
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.lofi-root {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at top, var(--lofi-bg-mid) 0%, var(--lofi-bg-deep) 70%),
+    var(--lofi-bg-deep);
+  padding: 1rem;
+  min-height: 100%;
+  color: #e9e5ff;
+}
+
+.lofi-scene {
+  width: 100%;
+  max-width: 960px;
+  background: var(--lofi-bg-room);
+  border: 4px solid #000;
+  box-shadow:
+    0 0 0 4px var(--lofi-purple),
+    0 0 40px rgba(124, 58, 237, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  position: relative;
+}
+
+/* Header strip */
+.lofi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #000;
+  border: 2px solid var(--lofi-purple);
+  margin-bottom: 1rem;
+  font-size: 0.7rem;
+}
+
+.lofi-title {
+  color: var(--lofi-orange);
+  text-shadow: 0 0 8px var(--lofi-orange);
+  font-size: 0.85rem;
+}
+
+.lofi-live {
+  color: var(--lofi-green);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.55rem;
+  text-shadow: 0 0 6px var(--lofi-green);
+}
+
+.lofi-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--lofi-green);
+  display: inline-block;
+  box-shadow: 0 0 8px var(--lofi-green);
+  animation: lofi-pulse 1.6s infinite ease-in-out;
+}
+
+@keyframes lofi-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+/* Stage layout */
+.lofi-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 720px) {
+  .lofi-stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ROOM */
+.lofi-room {
+  background: linear-gradient(to bottom, #3a2961 0%, #2d1f4a 70%, #1f1535 100%);
+  border: 2px solid #000;
+  padding: 1rem;
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Floor line */
+.lofi-room::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* WINDOW */
+.lofi-window {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 140px;
+  height: 140px;
+  background: var(--lofi-window-night-2);
+  border: 6px solid #2a1810;
+  box-shadow:
+    inset 0 0 0 2px #000,
+    0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+.lofi-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #0a1a3a 0%, var(--lofi-window-night) 60%, #2a4080 100%);
+  overflow: hidden;
+}
+
+.lofi-moon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  background: var(--lofi-moon);
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px var(--lofi-moon),
+    inset -6px -2px 0 0 #d4be8e;
+}
+
+.lofi-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  box-shadow: 0 0 4px #fff;
+  animation: lofi-twinkle 3s infinite;
+}
+.lofi-star-1 {
+  top: 20px;
+  left: 24px;
+  animation-delay: 0s;
+}
+.lofi-star-2 {
+  top: 50px;
+  left: 80px;
+  animation-delay: 0.6s;
+}
+.lofi-star-3 {
+  top: 80px;
+  left: 30px;
+  animation-delay: 1.2s;
+}
+.lofi-star-4 {
+  top: 14px;
+  left: 64px;
+  animation-delay: 1.8s;
+}
+.lofi-star-5 {
+  top: 70px;
+  left: 100px;
+  animation-delay: 2.4s;
+}
+
+@keyframes lofi-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.lofi-window-frame-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #2a1810;
+  transform: translateY(-50%);
+}
+
+.lofi-window-frame-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #2a1810;
+  transform: translateX(-50%);
+}
+
+/* DESK */
+.lofi-desk {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 90px;
+}
+
+.lofi-desk-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  height: 14px;
+  background: var(--lofi-desk);
+  border-top: 2px solid #7a5435;
+  border-bottom: 2px solid var(--lofi-desk-dark);
+}
+
+.lofi-desk-leg {
+  position: absolute;
+  bottom: 0;
+  width: 10px;
+  height: 60px;
+  background: var(--lofi-desk-dark);
+}
+
+.lofi-desk-leg-l {
+  left: 24px;
+}
+
+.lofi-desk-leg-r {
+  right: 24px;
+}
+
+/* DESK LAMP */
+.lofi-lamp {
+  position: absolute;
+  left: 24px;
+  bottom: 74px;
+  width: 28px;
+  height: 60px;
+}
+
+.lofi-lamp-base {
+  position: absolute;
+  bottom: 0;
+  left: 6px;
+  width: 16px;
+  height: 4px;
+  background: #2a2a3a;
+}
+
+.lofi-lamp-arm {
+  position: absolute;
+  bottom: 4px;
+  left: 12px;
+  width: 4px;
+  height: 30px;
+  background: #2a2a3a;
+}
+
+.lofi-lamp-head {
+  position: absolute;
+  top: 6px;
+  left: 4px;
+  width: 20px;
+  height: 16px;
+  background: #3a3a4a;
+  border: 2px solid #000;
+  border-radius: 50% 50% 6px 6px;
+}
+
+.lofi-lamp-glow {
+  position: absolute;
+  top: 18px;
+  left: -30px;
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(circle, rgba(255, 154, 60, 0.4) 0%, rgba(255, 154, 60, 0.15) 40%, transparent 70%);
+  animation: lofi-flicker 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes lofi-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.85;
+  }
+  55% {
+    opacity: 1;
+  }
+}
+
+/* COFFEE CUP */
+.lofi-cup {
+  position: absolute;
+  right: 30px;
+  bottom: 76px;
+  width: 22px;
+  height: 18px;
+}
+
+.lofi-cup-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  height: 14px;
+  background: #e9e5ff;
+  border: 2px solid #000;
+}
+
+.lofi-cup-handle {
+  position: absolute;
+  bottom: 4px;
+  right: 0;
+  width: 6px;
+  height: 8px;
+  border: 2px solid #000;
+  border-left: none;
+  background: transparent;
+}
+
+.lofi-steam {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  animation: lofi-steam 2.4s infinite ease-out;
+}
+
+.lofi-steam-1 {
+  bottom: 18px;
+  left: 4px;
+  animation-delay: 0s;
+}
+
+.lofi-steam-2 {
+  bottom: 18px;
+  left: 10px;
+  animation-delay: 1.2s;
+}
+
+@keyframes lofi-steam {
+  0% {
+    opacity: 0.6;
+    transform: translateY(0) scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px) scaleY(1.4);
+  }
+}
+
+/* TINY LOBSTER */
+.lofi-lobster {
+  position: absolute;
+  right: 80px;
+  bottom: 76px;
+  width: 24px;
+  height: 18px;
+}
+
+.lofi-lob-body {
+  position: absolute;
+  left: 6px;
+  bottom: 2px;
+  width: 12px;
+  height: 10px;
+  background: var(--lofi-lobster);
+  border: 2px solid var(--lofi-lobster-dark);
+}
+
+.lofi-lob-tail {
+  position: absolute;
+  left: 16px;
+  bottom: 4px;
+  width: 6px;
+  height: 6px;
+  background: var(--lofi-lobster);
+  border: 2px solid var(--lofi-lobster-dark);
+  border-left: none;
+}
+
+.lofi-lob-claw-l {
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 6px;
+  height: 6px;
+  background: var(--lofi-lobster);
+  border: 2px solid var(--lofi-lobster-dark);
+}
+
+.lofi-lob-claw-r {
+  position: absolute;
+  left: 4px;
+  bottom: 12px;
+  width: 4px;
+  height: 4px;
+  background: var(--lofi-lobster);
+}
+
+.lofi-lob-eye-l,
+.lofi-lob-eye-r {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #000;
+  bottom: 8px;
+}
+
+.lofi-lob-eye-l {
+  left: 9px;
+}
+
+.lofi-lob-eye-r {
+  left: 13px;
+}
+
+/* MONITOR */
+.lofi-monitor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lofi-monitor-screen {
+  width: 100%;
+  background: #000;
+  border: 6px solid #1a1a2a;
+  box-shadow:
+    inset 0 0 0 2px #2a2a3a,
+    0 0 30px rgba(52, 238, 182, 0.2);
+  padding: 1rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CRT scanline effect */
+.lofi-monitor-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.25) 3px,
+    rgba(0, 0, 0, 0.25) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.lofi-monitor-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lofi-monitor-stand {
+  width: 60px;
+  height: 14px;
+  background: #1a1a2a;
+  border: 2px solid #000;
+  border-top: none;
+}
+
+.lofi-monitor-base {
+  width: 120px;
+  height: 6px;
+  background: #1a1a2a;
+  border: 2px solid #000;
+}
+
+.lofi-panel {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.55rem;
+}
+
+.lofi-panel-label {
+  color: var(--lofi-text-dim);
+  font-size: 0.5rem;
+}
+
+.lofi-panel-value {
+  font-size: 0.7rem;
+}
+
+.lofi-glow-green {
+  color: var(--lofi-green);
+  text-shadow:
+    0 0 6px var(--lofi-green-glow),
+    0 0 12px rgba(52, 238, 182, 0.4);
+  animation: lofi-glow-green 3s infinite ease-in-out;
+}
+
+.lofi-glow-orange {
+  color: var(--lofi-orange);
+  text-shadow:
+    0 0 6px var(--lofi-orange-soft),
+    0 0 12px rgba(255, 154, 60, 0.4);
+  animation: lofi-glow-orange 3s infinite ease-in-out;
+}
+
+.lofi-glow-purple {
+  color: var(--lofi-purple-soft);
+  text-shadow:
+    0 0 6px var(--lofi-purple-soft),
+    0 0 12px rgba(167, 139, 250, 0.4);
+  animation: lofi-glow-purple 3s infinite ease-in-out;
+}
+
+@keyframes lofi-glow-green {
+  0%,
+  100% {
+    text-shadow:
+      0 0 6px var(--lofi-green-glow),
+      0 0 12px rgba(52, 238, 182, 0.4);
+  }
+  50% {
+    text-shadow:
+      0 0 10px var(--lofi-green-glow),
+      0 0 20px rgba(52, 238, 182, 0.6);
+  }
+}
+
+@keyframes lofi-glow-orange {
+  0%,
+  100% {
+    text-shadow:
+      0 0 6px var(--lofi-orange-soft),
+      0 0 12px rgba(255, 154, 60, 0.4);
+  }
+  50% {
+    text-shadow:
+      0 0 10px var(--lofi-orange-soft),
+      0 0 20px rgba(255, 154, 60, 0.6);
+  }
+}
+
+@keyframes lofi-glow-purple {
+  0%,
+  100% {
+    text-shadow:
+      0 0 6px var(--lofi-purple-soft),
+      0 0 12px rgba(167, 139, 250, 0.4);
+  }
+  50% {
+    text-shadow:
+      0 0 10px var(--lofi-purple-soft),
+      0 0 20px rgba(167, 139, 250, 0.6);
+  }
+}
+
+.lofi-panel-divider {
+  position: relative;
+  z-index: 3;
+  height: 2px;
+  background: rgba(124, 58, 237, 0.25);
+  margin: 0.25rem 0;
+}
+
+.lofi-cursor {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-size: 0.6rem;
+  color: var(--lofi-green);
+}
+
+.lofi-prompt {
+  color: var(--lofi-purple-soft);
+}
+
+.lofi-blink {
+  animation: lofi-blink 1s steps(2) infinite;
+}
+
+@keyframes lofi-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Lofi header / footer overrides */
+.lofi-header-bar {
+  background: #000;
+  border-bottom: 2px solid var(--lofi-purple);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lofi-header-logo {
+  color: var(--lofi-orange);
+  text-shadow: 0 0 8px var(--lofi-orange);
+  font-size: 0.75rem;
+}
+
+.lofi-header-sub {
+  color: var(--lofi-text-dim);
+  font-size: 0.45rem;
+}
+
+.lofi-footer-bar {
+  background: #000;
+  border-top: 2px solid var(--lofi-purple);
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.55rem;
+  color: var(--lofi-text-dim);
+}
+
+.lofi-footer-bar a {
+  color: var(--lofi-green);
+  text-decoration: none;
+  text-shadow: 0 0 4px rgba(52, 238, 182, 0.5);
+}
+
+.lofi-footer-bar a:hover {
+  color: var(--lofi-green-glow);
+}
