@@ -1,14 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 type AnimatedNumberProps = {
   value: string;
   className?: string;
 };
 
-export const AnimatedNumber: React.FC<AnimatedNumberProps> = ({ value, className = "" }) => {
+export const AnimatedNumber = ({ value, className = "" }: AnimatedNumberProps) => {
   const [displayValue, setDisplayValue] = useState(value);
   const [isUpdating, setIsUpdating] = useState(false);
 

@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import type { NextPage } from "next";
 import { createPublicClient, formatUnits, http } from "viem";
 import { base } from "viem/chains";
+import { AnimatedNumber } from "~~/components/AnimatedNumber";
+import { MusicPlayer } from "~~/components/MusicPlayer";
 
 const CLAWD_ADDRESS = "0x9f86dB9fc6f7c9408e8Fda3Ff8ce4e78ac7a6b07" as const;
 const LEFTCLAW_ADDRESS = "0xb2fb486a9569ad2c97d9c73936b46ef7fdaa413a" as const;
@@ -82,16 +85,11 @@ const Home: NextPage = () => {
     let cancelled = false;
 
     const fetchData = async () => {
-      const next: ClawdData = {
-        price: "--",
-        burned: "--",
-        totalJobs: "--",
-        totalSupply: "--",
+      const updates: Partial<ClawdData> = {
         loading: false,
         lastUpdated: new Date(),
       };
 
-      // Contract reads in parallel
       const [supplyResult, jobIdResult, priceResult] = await Promise.allSettled([
         publicClient.readContract({
           address: CLAWD_ADDRESS,
@@ -111,14 +109,14 @@ const Home: NextPage = () => {
       if (supplyResult.status === "fulfilled") {
         const totalSupply = supplyResult.value as bigint;
         const burned = MAX_SUPPLY - totalSupply;
-        next.burned = `${formatBurned(burned)} CLAWD`;
+        updates.burned = `${formatBurned(burned)} CLAWD`;
         const supplyTokens = Number(formatUnits(totalSupply, 18));
-        next.totalSupply = supplyTokens.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        updates.totalSupply = supplyTokens.toLocaleString(undefined, { maximumFractionDigits: 0 });
       }
 
       if (jobIdResult.status === "fulfilled") {
         const totalJobs = Number(jobIdResult.value as bigint) - 1;
-        next.totalJobs = totalJobs >= 0 ? totalJobs.toLocaleString() : "--";
+        updates.totalJobs = totalJobs >= 0 ? totalJobs.toLocaleString() : "--";
       }
 
       if (priceResult.status === "fulfilled" && priceResult.value) {
@@ -126,21 +124,20 @@ const Home: NextPage = () => {
           | Array<{ priceUsd?: string; liquidity?: { usd?: number } }>
           | undefined;
         if (pairs && pairs.length > 0) {
-          // Pick pair with highest liquidity
           const best = [...pairs].sort((a, b) => (b.liquidity?.usd ?? 0) - (a.liquidity?.usd ?? 0))[0];
           if (best?.priceUsd) {
-            next.price = formatPrice(best.priceUsd);
+            updates.price = formatPrice(best.priceUsd);
           }
         }
       }
 
       if (!cancelled) {
-        setData(next);
+        setData(prev => ({ ...prev, ...updates }));
       }
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 30000);
+    const interval = setInterval(fetchData, 15000);
     return () => {
       cancelled = true;
       clearInterval(interval);
@@ -156,18 +153,29 @@ const Home: NextPage = () => {
   return (
     <div className="lofi-root">
       <div className="lofi-scene">
-        {/* Header bar */}
         <div className="lofi-header">
           <div className="lofi-title">LOFI LOBSTER</div>
-          <div className="lofi-live">
-            <span className="lofi-dot" />
-            {liveLabel}
+          <div className="lofi-header-actions">
+            <div className="lofi-live">
+              <span className="lofi-dot" />
+              {liveLabel}
+            </div>
+            <MusicPlayer />
           </div>
         </div>
 
-        <div className="lofi-stage">
-          {/* Left: pixel art room scene */}
-          <div className="lofi-room">
+        <motion.div
+          className="lofi-stage"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <motion.div
+            className="lofi-room"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
             <div className="lofi-window">
               <div className="lofi-sky">
                 <div className="lofi-star lofi-star-1" />
@@ -182,7 +190,6 @@ const Home: NextPage = () => {
             </div>
 
             <div className="lofi-desk">
-              {/* Desk lamp */}
               <div className="lofi-lamp">
                 <div className="lofi-lamp-glow" />
                 <div className="lofi-lamp-head" />
@@ -190,7 +197,6 @@ const Home: NextPage = () => {
                 <div className="lofi-lamp-base" />
               </div>
 
-              {/* Coffee cup */}
               <div className="lofi-cup">
                 <div className="lofi-steam lofi-steam-1" />
                 <div className="lofi-steam lofi-steam-2" />
@@ -198,7 +204,6 @@ const Home: NextPage = () => {
                 <div className="lofi-cup-handle" />
               </div>
 
-              {/* Tiny lobster */}
               <div className="lofi-lobster" aria-label="pixel lobster">
                 <div className="lofi-lob-claw-l" />
                 <div className="lofi-lob-claw-r" />
@@ -212,30 +217,61 @@ const Home: NextPage = () => {
               <div className="lofi-desk-leg lofi-desk-leg-l" />
               <div className="lofi-desk-leg lofi-desk-leg-r" />
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right: data monitor */}
-          <div className="lofi-monitor">
+          <motion.div
+            className="lofi-monitor"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
             <div className="lofi-monitor-screen">
-              <div className="lofi-panel">
+              {data.loading && (
+                <motion.div
+                  className="lofi-loading-indicator"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="lofi-loading-pulse" />
+                  <span className="lofi-loading-text">FETCHING...</span>
+                </motion.div>
+              )}
+              <motion.div
+                className="lofi-panel lofi-panel-interactive"
+                whileHover={{ scale: 1.02, x: 2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
                 <div className="lofi-panel-label">PRICE</div>
-                <div className="lofi-panel-value lofi-glow-green">{data.price}</div>
-              </div>
+                <AnimatedNumber value={data.price} className="lofi-panel-value lofi-glow-green" />
+              </motion.div>
               <div className="lofi-panel-divider" />
-              <div className="lofi-panel">
+              <motion.div
+                className="lofi-panel lofi-panel-interactive"
+                whileHover={{ scale: 1.02, x: 2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
                 <div className="lofi-panel-label">BURNED</div>
-                <div className="lofi-panel-value lofi-glow-orange">{data.burned}</div>
-              </div>
+                <AnimatedNumber value={data.burned} className="lofi-panel-value lofi-glow-orange" />
+              </motion.div>
               <div className="lofi-panel-divider" />
-              <div className="lofi-panel">
+              <motion.div
+                className="lofi-panel lofi-panel-interactive"
+                whileHover={{ scale: 1.02, x: 2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
                 <div className="lofi-panel-label">JOBS BUILT</div>
-                <div className="lofi-panel-value lofi-glow-green">{data.totalJobs}</div>
-              </div>
+                <AnimatedNumber value={data.totalJobs} className="lofi-panel-value lofi-glow-green" />
+              </motion.div>
               <div className="lofi-panel-divider" />
-              <div className="lofi-panel">
+              <motion.div
+                className="lofi-panel lofi-panel-interactive"
+                whileHover={{ scale: 1.02, x: 2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
                 <div className="lofi-panel-label">SUPPLY</div>
-                <div className="lofi-panel-value lofi-glow-purple">{data.totalSupply}</div>
-              </div>
+                <AnimatedNumber value={data.totalSupply} className="lofi-panel-value lofi-glow-purple" />
+              </motion.div>
               <div className="lofi-cursor">
                 <span className="lofi-prompt">{">"}</span>
                 <span className="lofi-blink">_</span>
@@ -243,8 +279,8 @@ const Home: NextPage = () => {
             </div>
             <div className="lofi-monitor-stand" />
             <div className="lofi-monitor-base" />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

@@ -192,11 +192,18 @@ canvas,
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   padding: 0.75rem 1rem;
   background: #000;
   border: 2px solid var(--lofi-purple);
   margin-bottom: 1rem;
   font-size: 0.7rem;
+}
+
+.lofi-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .lofi-title {
@@ -813,4 +820,92 @@ canvas,
 
 .lofi-footer-bar a:hover {
   color: var(--lofi-green-glow);
+}
+
+/* Music player */
+.lofi-music-player {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.55);
+}
+
+.lofi-music-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: var(--lofi-purple-soft);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.lofi-music-button:hover {
+  color: var(--lofi-green);
+}
+
+.lofi-music-icon {
+  font-size: 0.65rem;
+}
+
+.lofi-music-emoji {
+  font-size: 0.75rem;
+}
+
+.lofi-music-label {
+  color: var(--lofi-text-dim);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+}
+
+/* Loading indicator */
+.lofi-loading-indicator {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--lofi-green);
+  font-size: 0.55rem;
+  text-shadow: 0 0 6px var(--lofi-green);
+  animation: lofi-fetch-pulse 1.5s infinite ease-in-out;
+}
+
+.lofi-loading-pulse {
+  width: 8px;
+  height: 8px;
+  background: var(--lofi-green);
+  box-shadow: 0 0 8px var(--lofi-green);
+}
+
+.lofi-loading-text {
+  letter-spacing: 0.12em;
+}
+
+@keyframes lofi-fetch-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Interactive data panels */
+.lofi-panel-interactive {
+  cursor: default;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.lofi-panel-interactive:hover {
+  background: rgba(124, 58, 237, 0.12);
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.35);
 }
